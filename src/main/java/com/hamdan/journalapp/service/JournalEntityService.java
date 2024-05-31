@@ -2,11 +2,13 @@ package com.hamdan.journalapp.service;
 
 
 import com.hamdan.journalapp.entity.JournalEntries;
+import com.hamdan.journalapp.entity.User;
 import com.hamdan.journalapp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +18,15 @@ public class JournalEntityService
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntries journalEntity)
+    @Autowired
+    private UserService userService;
+    public void saveEntry(JournalEntries journalEntry, String userName)
     {
-        journalEntryRepository.save(journalEntity);
+        User user = userService.findByUserName(userName);
+        journalEntry.setDate(LocalDateTime.now());
+        JournalEntries saved = journalEntryRepository.save(journalEntry);
+        user.getJournalEntries().add(saved);
+        userService.saveEntry(user);
     }
 
     public List<JournalEntries> getAll()
