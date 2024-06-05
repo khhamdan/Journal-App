@@ -22,11 +22,15 @@ public class JournalEntityService
     private UserService userService;
     public void saveEntry(JournalEntries journalEntry, String userName)
     {
-        User user = userService.findByUserName(userName);
         journalEntry.setDate(LocalDateTime.now());
         JournalEntries saved = journalEntryRepository.save(journalEntry);
+        User user = userService.findByUserName(userName);
         user.getJournalEntries().add(saved);
         userService.saveEntry(user);
+    }
+    public void saveEntry(JournalEntries journalEntry)
+    {
+        journalEntryRepository.save(journalEntry);
     }
 
     public List<JournalEntries> getAll()
@@ -39,9 +43,13 @@ public class JournalEntityService
         return journalEntryRepository.findById(id);
     }
 
-    public void deleteById(ObjectId myId)
+    public void deleteById(ObjectId id, String userName)
     {
-        journalEntryRepository.deleteById(myId);
+        User user = userService.findByUserName(userName);
+        user.getJournalEntries().removeIf(x->x.getId().equals(id));
+        userService.saveEntry(user);
+        journalEntryRepository.deleteById(id);
+
     }
 
 }
