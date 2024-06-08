@@ -27,4 +27,12 @@ public class User
     private String password;
     @DBRef // Due to this annotation
     private List<JournalEntries> journalEntries = new ArrayList<>();
+
+    public List<JournalEntries> getJournalEntries() {
+        return journalEntries;
+    }
+
+    public void setJournalEntries(List<JournalEntries> journalEntries) {
+        this.journalEntries = journalEntries;
+    }
 }
