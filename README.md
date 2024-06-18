@@ -5,3 +5,4 @@ This repository is for the journal app backend built in Spring Boot with MongoDb
 3. Added Lombok
 4. Added JournalEntries on Users data 
 5. Transactional and configuration of it
+6. Added Spring Security 
